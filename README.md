@@ -1,4 +1,4 @@
-# hassan Sensor Monitor Api Application
+# Sensor Monitor Api Application
 
 **this project is made using symfony and mysql and phpunit test.**
 
@@ -62,6 +62,95 @@ Testing tests/Util
 Time: 833 ms, Memory: 18.00 MB
 
 OK (3 tests, 3 assertions)
+
+
+## Database Schema / Design
+
+-- phpMyAdmin SQL Dump
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Dec 16, 2020 at 06:23 PM
+-- Server version: 5.7.31
+-- PHP Version: 7.4.9
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Database: `sensor_monitor_db`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sensor_alerts`
+--
+
+DROP TABLE IF EXISTS `sensor_alerts`;
+CREATE TABLE IF NOT EXISTS `sensor_alerts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sensor_detail_id` int(11) NOT NULL,
+  `co_alert_level` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `row_insertion_datetime` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_59EDEE7BA19AAFAE` (`sensor_detail_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sensor_detail`
+--
+
+DROP TABLE IF EXISTS `sensor_detail`;
+CREATE TABLE IF NOT EXISTS `sensor_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mac_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `row_insertion_datetime` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sensor_measurement`
+--
+
+DROP TABLE IF EXISTS `sensor_measurement`;
+CREATE TABLE IF NOT EXISTS `sensor_measurement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sensor_detail_id` int(11) NOT NULL,
+  `co_level` int(11) NOT NULL,
+  `reading_datetime` datetime NOT NULL,
+  `row_insertion_datetime` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_C435A88CA19AAFAE` (`sensor_detail_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `sensor_alerts`
+--
+ALTER TABLE `sensor_alerts`
+  ADD CONSTRAINT `FK_59EDEE7BA19AAFAE` FOREIGN KEY (`sensor_detail_id`) REFERENCES `sensor_detail` (`id`);
+
+--
+-- Constraints for table `sensor_measurement`
+--
+ALTER TABLE `sensor_measurement`
+  ADD CONSTRAINT `FK_C435A88CA19AAFAE` FOREIGN KEY (`sensor_detail_id`) REFERENCES `sensor_detail` (`id`);
+COMMIT;
+
 
 
 
