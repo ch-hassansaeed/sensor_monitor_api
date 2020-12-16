@@ -54,6 +54,19 @@ http://127.0.0.1:8000/api/v1/sensor/222-dfs-34-df2-234-fdsf-234/alerts
 
 ]
 
+## symfony Supprtive commands
+```symfony server:start
+create database using
+```php bin/console doctrine:database:create
+
+create or make migration using 
+```php bin/console make:migration
+
+run the migration using 
+```php bin/console doctrine:migrations:migrate
+
+for run all test cases in util folder
+ ```php bin/phpunit tests/Util
 
 ## PHP Unit Testing
 
