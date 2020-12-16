@@ -2,7 +2,8 @@
 
 **this project is made using symfony and mysql and phpunit test.**
 
-**Project Demo Video Link:- **
+**Project Demo Video Link:-**
+
 https://github.com/ch-hassansaeed/sensor_monitor_api/blob/main/Project_Demo_video.mp4
 
 ## API Testing
