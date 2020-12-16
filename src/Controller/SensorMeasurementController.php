@@ -126,8 +126,6 @@ class SensorMeasurementController extends AbstractController
         $repository = $this->getDoctrine()
             ->getRepository(SensorMeasurement::class);
 
-// createQueryBuilder() automatically selects FROM AppBundle:Product
-// and aliases it to "p"
         $query = $repository->createQueryBuilder('p')
             ->select('p.co_level')
             ->where("p.sensor_detail = '".$sensor_id."'")
@@ -145,7 +143,7 @@ class SensorMeasurementController extends AbstractController
         $latest_reading = $query->setMaxResults(1)->getOneOrNullResult();
 
         $co_level=$latest_reading["co_level"];
-     $response_status_value="";
+        $response_status_value="";
         if($co_level<2000)
         {
          $response_status_value="OK";
@@ -202,7 +200,7 @@ class SensorMeasurementController extends AbstractController
         die("testing:break time");
         //*/
         // to get the all data of alert entity to show as report as rest josn response
-$alerts_response_arr=array();
+        $alerts_response_arr=array();
         foreach ($sensor_curr_alerts_list as $sensor_curr_alerts_list_element) {
             $co_alert_level= $sensor_curr_alerts_list_element["co_alert_level"];
             $startTime_obj=$sensor_curr_alerts_list_element["startTime"];
@@ -360,9 +358,9 @@ $alerts_response_arr=array();
             $i++;
         }
 
-//now before insert alert data into table check two cases
-//1.current sensor data in alert table should not have any row in wait state(wait state mean no value in endTime)
-//2.and sensor measurement exceed(>2k) has more than 3 values
+        //now before insert alert data into table check two cases
+        //1.current sensor data in alert table should not have any row in wait state(wait state mean no value in endTime)
+        //2.and sensor measurement exceed(>2k) has more than 3 values
         if(count($sensor_alert_latest_alert)==0 && $is_consective_3_values_exceed==true) {//mean it need to insert into alert entity
             $entityManager = $this->getDoctrine()->getManager();
             $sensorAlert = new SensorAlerts();
@@ -389,14 +387,14 @@ $alerts_response_arr=array();
             ->getQuery();
 
         $SensorMeasurement_exceed_results = $query->getResult();
-//last latest 3 exceed(>2k) values(comma sperated)
+        //last latest 3 exceed(>2k) values(comma sperated)
         $sensor_latest_three_levels_comma_sep="";
         foreach ($SensorMeasurement_exceed_results as $SensorMeasurement_exceed_result) {
             $sensor_latest_three_levels_comma_sep=$sensor_latest_three_levels_comma_sep.$SensorMeasurement_exceed_result["co_level"].",";
         }
         $sensor_latest_three_levels_comma_sep=rtrim($sensor_latest_three_levels_comma_sep,",");
         //echo $sensor_latest_three_levels_comma_sep;
-//if exceed value goes less ( <2k )  then update alert table as wait state to end(mean set Endtime as Now time)
+        //if exceed value goes less ( <2k )  then update alert table as wait state to end(mean set Endtime as Now time)
         if($co_level<2000) {
             $sensorAlertmode_off = $entityManager->getRepository(SensorAlerts::class)->update_sensoralert_mode_off($sensor_detail_id, $co_level,$curr_sensor_latest_reading_datetime,$sensor_latest_three_levels_comma_sep);
         }
