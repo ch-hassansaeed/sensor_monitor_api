@@ -55,18 +55,18 @@ http://127.0.0.1:8000/api/v1/sensor/222-dfs-34-df2-234-fdsf-234/alerts
 ]
 
 ## symfony Supprtive commands
-```symfony server:start
+```symfony server:start```
 create database using
-```php bin/console doctrine:database:create
+```php bin/console doctrine:database:create```
 
 create or make migration using 
-```php bin/console make:migration
+```php bin/console make:migration```
 
 run the migration using 
-```php bin/console doctrine:migrations:migrate
+```php bin/console doctrine:migrations:migrate```
 
 for run all test cases in util folder
- ```php bin/phpunit tests/Util
+ ```php bin/phpunit tests/Util```
 
 ## PHP Unit Testing
 
@@ -83,6 +83,7 @@ OK (3 tests, 3 assertions)
 
 ## Database Schema / Design
 
+```
 -- phpMyAdmin SQL Dump
 -- version 5.0.2
 --
@@ -166,7 +167,4 @@ ALTER TABLE `sensor_alerts`
 ALTER TABLE `sensor_measurement`
   ADD CONSTRAINT `FK_C435A88CA19AAFAE` FOREIGN KEY (`sensor_detail_id`) REFERENCES `sensor_detail` (`id`);
 COMMIT;
-
-
-
-
+```
