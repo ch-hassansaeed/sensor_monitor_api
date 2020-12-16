@@ -43,9 +43,11 @@ http://127.0.0.1:8000/api/v1/sensor/222-dfs-34-df2-234-fdsf-234/alerts
 
 **Response:**
 [
+
 {"startTime":"2020-10-14 17:17:38","endTime":"2020-10-18 18:18:38","mesurement1":"2871","mesurement2":"2671","mesurement3":"2371"},
 
 {"startTime":"2020-12-04 18:18:38","endTime":"2020-12-05 18:18:38","mesurement1":"2945","mesurement2":"2745","mesurement3":"2345"}
+
 ]
 
 
