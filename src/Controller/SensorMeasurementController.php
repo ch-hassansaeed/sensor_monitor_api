@@ -26,6 +26,8 @@ class SensorMeasurementController extends AbstractController
      */
     public function add_sensor_measurement(Request $request,SensorDetailRepository $sensorDetailRepository): Response
     {
+        //******************* Region UID to SensorDetail ID **************
+        
         //first make connection and object of database
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -38,17 +40,17 @@ class SensorMeasurementController extends AbstractController
             ->where("sd.uuid = '".$uid."'");
         $sensor_results=$qb->getQuery()->getResult();
         //to show $sensor_results all rows wrt to where clause
-        //echo "<pre>";
-        //print_r($sensor_results);
-        //echo "</pre>";
+        //echo "<pre>";print_r($sensor_results);echo "</pre>";
         if(!isset($sensor_results) || count($sensor_results)<=0)
             return new JsonResponse("invalid uuid value!", Response::HTTP_BAD_REQUEST);
 
-        $sensor_id=$sensor_results[0]["id"];
-        //check the return id of sensor wrt to current input uuid
-        //echo "sensor_id::".$sensor_id;
-        //die("<br>Test break:i am here");
+        $sensor_id=$sensor_results[0]["id"];  
+        //echo "sensor_id::".$sensor_id;//check the return id of sensor wrt to current input uuid
+        
+        //******************* Region UID to SensorDetail ID **************
 
+
+        //******************* Parse input Requested Post Json **************
         $content = $request->getContent();
         //echo $content;//verify json string
 
@@ -58,8 +60,10 @@ class SensorMeasurementController extends AbstractController
         $sensor_detail_id = $sensor_id;
         $co_level = isset($data['co2']) ? $data['co2'] : null;
         $reading_datetime = isset($data['time']) ? $data['time'] : null;
+        //******************* Parse input Requested Post Json **************
 
 
+        //******************* Region insert data into DB Table(SensorMeasurement) like reading time & co level **************
         $SensorMeasurement = new SensorMeasurement;
         $sensor_detail=$sensorDetailRepository->find($sensor_detail_id);
         $SensorMeasurement->setSensorId($sensor_detail);
@@ -69,25 +73,22 @@ class SensorMeasurementController extends AbstractController
 
         $validator = Validation::createValidator();
 
+        //if input data is not valid then response will return as 400
         $errors = $validator->validate($SensorMeasurement);
         if (count($errors) > 0) {
             return $this->json([
                 (string) $errors => '400',
             ]);
         }
-
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($SensorMeasurement);
-
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
-
         //also insert into alert entity if more than 3 time co2_lvl is >= then 2000
         $this->UpdateAlertStatus($co_level, $sensor_detail_id);
+        //******************* Region insert data into DB Table(SensorMeasurement) like reading time & co level **************
 
-
-
-
+        //after insertion into Db show/reponse the latest row inserted auto-gen ID (getId())
         return $this->json([
             'new measurement collected with id:' => $SensorMeasurement->getId(),
         ]);
@@ -100,6 +101,7 @@ class SensorMeasurementController extends AbstractController
      */
     public function get_sensor_measurement(Request $request): Response
     {
+        //******************* Region UID to SensorDetail ID **************
         //first make connection and object of database
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -112,17 +114,15 @@ class SensorMeasurementController extends AbstractController
             ->where("sd.uuid = '".$uid."'");
         $sensor_results=$qb->getQuery()->getResult();
         //to show $sensor_results all rows wrt to where clause
-        //echo "<pre>";
-        //print_r($sensor_results);
-        //echo "</pre>";
+        //echo "<pre>";//print_r($sensor_results);//echo "</pre>";
         if(!isset($sensor_results) || count($sensor_results)<=0)
             return new JsonResponse("invalid uuid value!", Response::HTTP_BAD_REQUEST);
 
         $sensor_id=$sensor_results[0]["id"];
-        //check the return id of sensor wrt to current input uuid
-        //echo "sensor_id::".$sensor_id;
-        //die("<br>Test break:i am here");
+        //echo "sensor_id::".$sensor_id;//check the return id of sensor wrt to current input uuid
+        //******************* Region UID to SensorDetail ID **************
 
+        //get the latest dataset of SensorMeasurement entity/table
         $repository = $this->getDoctrine()
             ->getRepository(SensorMeasurement::class);
 
@@ -132,13 +132,6 @@ class SensorMeasurementController extends AbstractController
             ->orderBy('p.reading_datetime', 'DESC')
             ->getQuery();
 
-        //$SensorMeasurement_results = $query->getResult();
-        /*
-        echo "<pre>";
-        print_r($SensorMeasurement_results);
-        echo "</pre>";
-        die("testing:break time");
-        //*/
         // to get one result for current input sensor but value should be latest by reading time:
         $latest_reading = $query->setMaxResults(1)->getOneOrNullResult();
 
@@ -167,6 +160,7 @@ class SensorMeasurementController extends AbstractController
      */
     public function get_sensor_alerts(Request $request): Response
     {
+        //******************* Region UID to SensorDetail ID **************
         //first make connection and object of database
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -183,22 +177,19 @@ class SensorMeasurementController extends AbstractController
             return new JsonResponse("invalid uuid value!", Response::HTTP_BAD_REQUEST);
 
         $sensor_id=$sensor_results[0]["id"];
-        //check the return id of sensor wrt to current input uuid
-        //echo "sensor_id::".$sensor_id;
+        //echo "sensor_id::".$sensor_id;        //check the return id of sensor wrt to current input uuid
+        //******************* Region UID to SensorDetail ID **************
 
+        //******************* Get SensorAlerts Table Data wrt input UUID sensor **************
         $qb = $entityManager->createQueryBuilder();
         $select_fields_colmuns = array('sa.co_alert_level', 'sa.startTime', 'sa.endTime');
         $qb->select($select_fields_colmuns)
             ->from('App\Entity\SensorAlerts', 'sa')
             ->where("sa.sensor_detail = '".$sensor_id."' and sa.endTime is not null");
         $sensor_curr_alerts_list=$qb->getQuery()->getResult();
+        //******************* Get SensorAlerts Table Data wrt input UUID sensor **************
 
-        /*
-        echo "<pre>";
-        print_r($sensor_curr_alerts_list);
-        echo "</pre>";
-        die("testing:break time");
-        //*/
+        //******************* Parse SensorAlerts DB datatable Data **************
         // to get the all data of alert entity to show as report as rest josn response
         $alerts_response_arr=array();
         foreach ($sensor_curr_alerts_list as $sensor_curr_alerts_list_element) {
@@ -211,7 +202,9 @@ class SensorMeasurementController extends AbstractController
             $single_alert_record_arr = ["startTime" => $startTime, "endTime" => $endTime, "mesurement1" => $co_alert_level_comma_split_arr[0], "mesurement2" => $co_alert_level_comma_split_arr[1], "mesurement3" => $co_alert_level_comma_split_arr[2]];
             $alerts_response_arr[]=$single_alert_record_arr;
         }
-
+        //******************* Parse SensorAlerts DB datatable Data **************
+        
+        //shoe this parsed data as responsed
         return $this->json($alerts_response_arr);
 
     }//func::get_sensor_alerts
@@ -221,6 +214,7 @@ class SensorMeasurementController extends AbstractController
      */
     public function get_sensor_metrics(Request $request): Response
     {
+        //******************* Region UID to SensorDetail ID **************
         //first make connection and object of database
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -237,9 +231,10 @@ class SensorMeasurementController extends AbstractController
             return new JsonResponse("invalid uuid value!", Response::HTTP_BAD_REQUEST);
 
         $sensor_id=$sensor_results[0]["id"];
-        //check the return id of sensor wrt to current input uuid
-        //echo "sensor_id::".$sensor_id;
+        //echo "sensor_id::".$sensor_id;//check the return id of sensor wrt to current input uuid
+        //******************* Region UID to SensorDetail ID **************
 
+        //******************* Get SensorMeasurement Table Max & AVG Data wrt input UUID sensor **************
         $repository = $this->getDoctrine()
             ->getRepository(SensorMeasurement::class);
 
@@ -252,7 +247,7 @@ class SensorMeasurementController extends AbstractController
             ->setParameter('today', date('Y-m-d h:i:s'))
             ->setParameter('n30days', $date_30_days_ago);
         $max_co_level = $query->getQuery()->getResult();
-        //print_r($max_co_level);
+
         //for get avg value of CO2 level
         $query = $repository->createQueryBuilder('sd')
             ->select('AVG(sd.co_level) AS avg_co_level')
@@ -260,8 +255,10 @@ class SensorMeasurementController extends AbstractController
             ->setParameter('today', date('Y-m-d h:i:s'))
             ->setParameter('n30days', $date_30_days_ago);
         $avg_co_level = $query->getQuery()->getResult();
-        //print_r($avg_co_level);
 
+        //******************* Get SensorMeasurement Table Max & AVG Data wrt input UUID sensor **************
+
+        //convert both result as int to make it whole number instead of decimal 
         $max_co_levelInt=(integer)$max_co_level[0]["co_level"];
         $avg_co_levelInt=(integer)$avg_co_level[0]["avg_co_level"];
 
@@ -272,12 +269,13 @@ class SensorMeasurementController extends AbstractController
 
     }//func::get_sensor_metrics
 
-    //*******************************Functions Start Here ***********************************
+    //******************************* Custom Dependent Functions Start Here ***********************************
     /**
      * @return mixed
      */
     public function getCheckAlertStatus(int $sensor_detail_id)
     {
+        //******************* Get SensorMeasurement Table Data wrt input UUID sensor **************
         $entityManager = $this->getDoctrine()->getManager();
         $SensorMeasurementRepository = $this->getDoctrine()
             ->getRepository(SensorMeasurement::class);
@@ -290,8 +288,9 @@ class SensorMeasurementController extends AbstractController
             ->getQuery();
 
         $SensorMeasurement_last_three_results = $query->getResult();
+        //******************* Get SensorMeasurement Table Data wrt input UUID sensor **************
 
-        //for below if case 2
+        //to check that is last 3 consective co level record > 2000 that mean status is ALERT
         $is_consective_3_values_exceed=true;
         foreach ($SensorMeasurement_last_three_results as $SensorMeasurement_last_three_result) {
             //echo $SensorMeasurement_last_three_result["co_level"]."<br>";
@@ -308,6 +307,7 @@ class SensorMeasurementController extends AbstractController
      */
     public function UpdateAlertStatus($co_level, $sensor_detail_id)
     {
+        //******************* Get SensorMeasurement Table Data wrt input UUID sensor **************
         $entityManager = $this->getDoctrine()->getManager();
         $SensorMeasurementRepository = $this->getDoctrine()
             ->getRepository(SensorMeasurement::class);
@@ -321,8 +321,8 @@ class SensorMeasurementController extends AbstractController
             ->orderBy('p.reading_datetime', 'DESC')
             ->setMaxResults(3)
             ->getQuery();
-
         $SensorMeasurement_last_three_results = $query->getResult();
+        //******************* Get SensorMeasurement Table Data wrt input UUID sensor **************
         /*
         echo "<pre>";
         print_r($SensorMeasurement_last_three_results);
@@ -332,16 +332,16 @@ class SensorMeasurementController extends AbstractController
 
         $curr_sensor_latest_reading_datetime=null;
 
-        //for below if case 1
+        //case 1.current sensor data in alert table should not have any row in wait state(endTime colmun should NULL)
         $qb = $entityManager->createQueryBuilder();
         //echo $qb->getType();//to check query mode is select for 0 or any other mode
         $qb->select('sa.id')
             ->from('App\Entity\SensorAlerts', 'sa')
             ->where("sa.sensor_detail = '".$sensor_detail_id."' and sa.endTime is null");
-        $sensor_alert_latest_alert=$qb->getQuery()->getResult();
-        //print_r($sensor_alert_latest_alert);
+        $sensor_alert_latest_alert_WaitState=$qb->getQuery()->getResult();
+        //print_r($sensor_alert_latest_alert_WaitState);
 
-        //for below if case 2
+        //case 2.and sensor measurement latest 3 values exceed(>2k) 
         $is_consective_3_values_exceed=true;
         $i = 0;
         foreach ($SensorMeasurement_last_three_results as $SensorMeasurement_last_three_result) {
@@ -353,15 +353,16 @@ class SensorMeasurementController extends AbstractController
             $is_consective_3_values_exceed=false;
 
             if($i == 0) {
+                //this time will help to update endtime when senor will cool down(again goes back to normal val <2k)
              $curr_sensor_latest_reading_datetime= $reading_datetime;
             }
             $i++;
         }
 
         //now before insert alert data into table check two cases
-        //1.current sensor data in alert table should not have any row in wait state(wait state mean no value in endTime)
-        //2.and sensor measurement exceed(>2k) has more than 3 values
-        if(count($sensor_alert_latest_alert)==0 && $is_consective_3_values_exceed==true) {//mean it need to insert into alert entity
+        //case 1.current sensor data in alert table should not have any row in wait state(endTime colmun should NULL)
+        //case 2.and sensor measurement latest 3 values exceed(>2k) 
+        if(count($sensor_alert_latest_alert_WaitState)==0 && $is_consective_3_values_exceed==true) {//mean it need to insert into alert entity
             $entityManager = $this->getDoctrine()->getManager();
             $sensorAlert = new SensorAlerts();
             $SensorDetailRepository = $this->getDoctrine()
@@ -370,8 +371,6 @@ class SensorMeasurementController extends AbstractController
             $sensorAlert->setSensorId($sensor_detail);
             $sensorAlert->setRowInsertionDatetime(new \DateTime("now"));
             $sensorAlert->setStartTime(\DateTime::createFromFormat('Y-m-d H:i:s', $curr_sensor_latest_reading_datetime));
-
-
             // tell Doctrine you want to (eventually) save the Product (no queries yet)
             $entityManager->persist($sensorAlert);
             // actually executes the queries (i.e. the INSERT query)
@@ -398,9 +397,6 @@ class SensorMeasurementController extends AbstractController
         if($co_level<2000) {
             $sensorAlertmode_off = $entityManager->getRepository(SensorAlerts::class)->update_sensoralert_mode_off($sensor_detail_id, $co_level,$curr_sensor_latest_reading_datetime,$sensor_latest_three_levels_comma_sep);
         }
-
-
-        //die("alert data inserted");
         return true;
     }
 
