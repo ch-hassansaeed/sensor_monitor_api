@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Sensor Detail{% endblock %}
+
+{% block body %}
+    <h1>Create new Sensor Detail</h1>
+    <br>
+
+    {{ include('sensor_detail/_form.html.twig') }}
+
+    <a href="{{ path('sensor_detail_index') }}">back to list</a>
+{% endblock %}

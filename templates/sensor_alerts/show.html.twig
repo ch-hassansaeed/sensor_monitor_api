@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SensorAlerts{% endblock %}
+
+{% block body %}
+    <h1>SensorAlerts</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ sensor_alert.id }}</td>
+            </tr>
+            <tr>
+                <th>Co_alert_level</th>
+                <td>{{ sensor_alert.coAlertLevel }}</td>
+            </tr>
+            <tr>
+                <th>StartTime</th>
+                <td>{{ sensor_alert.startTime ? sensor_alert.startTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndTime</th>
+                <td>{{ sensor_alert.endTime ? sensor_alert.endTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Row_insertion_datetime</th>
+                <td>{{ sensor_alert.rowInsertionDatetime ? sensor_alert.rowInsertionDatetime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('sensor_alerts_index') }}">back to list</a>
+
+    <a href="{{ path('sensor_alerts_edit', {'id': sensor_alert.id}) }}">edit</a>
+
+    {{ include('sensor_alerts/_delete_form.html.twig') }}
+{% endblock %}

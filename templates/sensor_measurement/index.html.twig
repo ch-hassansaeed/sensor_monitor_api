@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SensorMeasurement index{% endblock %}
+
+{% block body %}
+    <h1>SensorMeasurement index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Co_level</th>
+                <th>Reading_datetime</th>
+                <th>Row_insertion_datetime</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sensor_measurement in sensor_measurements %}
+            <tr>
+                <td>{{ sensor_measurement.id }}</td>
+                <td>{{ sensor_measurement.coLevel }}</td>
+                <td>{{ sensor_measurement.readingDatetime ? sensor_measurement.readingDatetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ sensor_measurement.rowInsertionDatetime ? sensor_measurement.rowInsertionDatetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('sensor_measurement_show', {'id': sensor_measurement.id}) }}">show</a>
+                    <a href="{{ path('sensor_measurement_edit', {'id': sensor_measurement.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('sensor_measurement_new') }}">Create new</a>
+{% endblock %}

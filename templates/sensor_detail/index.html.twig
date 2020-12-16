@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SensorDetail index{% endblock %}
+
+
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="https:////cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+            <style>
+                .odd{
+                    background-color: #eee !important;
+                }
+                .even{
+                    background-color: #ccc !important;
+                }
+            </style>
+        {% endblock %}
+
+
+{% block body %}
+    <h1>Sensors</h1>
+
+    <table class="table" id="data_table">
+        <thead>
+            <tr>
+                <th>Id1</th>
+                <th>Uuid</th>
+                <th>Mac_address</th>
+                <th>Is_active</th>
+                <th>Row_insertion_datetime</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sensor_detail in sensor_details %}
+            <tr>
+                <td>{{ sensor_detail.id }}</td>
+                <td>{{ sensor_detail.uuid }}</td>
+                <td>{{ sensor_detail.macAddress }}</td>
+                <td>{{ sensor_detail.isActive ? 'Yes' : 'No' }}</td>
+                <td>{{ sensor_detail.rowInsertionDatetime ? sensor_detail.rowInsertionDatetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('sensor_detail_show', {'id': sensor_detail.id}) }}">show</a>
+                    <a href="{{ path('sensor_detail_edit', {'id': sensor_detail.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('sensor_detail_new') }}">Create new</a>
+{% endblock %}
+
+
+        {% block javascripts %}
+            <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+            <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+            <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+            <script type="text/javascript">//<![CDATA[
+
+
+                $(document).ready(function(){
+                    $(document).ready(function() {
+
+                        $('#data_table').DataTable( {
+                        });
+                    });
+                });
+
+
+                //]]></script>
+        {% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Sensor{% endblock %}
+
+
+
+{% block body %}
+    <h1>Edit Sensor Detail</h1>
+    <br>
+
+    {{ include('sensor_detail/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('sensor_detail_index') }}">back to list</a>
+
+    {{ include('sensor_detail/_delete_form.html.twig') }}
+{% endblock %}
+

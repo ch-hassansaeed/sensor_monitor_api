@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SensorAlerts index{% endblock %}
+
+{% block body %}
+    <h1>SensorAlerts index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Co_alert_level</th>
+                <th>StartTime</th>
+                <th>EndTime</th>
+                <th>Row_insertion_datetime</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sensor_alert in sensor_alerts %}
+            <tr>
+                <td>{{ sensor_alert.id }}</td>
+                <td>{{ sensor_alert.coAlertLevel }}</td>
+                <td>{{ sensor_alert.startTime ? sensor_alert.startTime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ sensor_alert.endTime ? sensor_alert.endTime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ sensor_alert.rowInsertionDatetime ? sensor_alert.rowInsertionDatetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('sensor_alerts_show', {'id': sensor_alert.id}) }}">show</a>
+                    <a href="{{ path('sensor_alerts_edit', {'id': sensor_alert.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('sensor_alerts_new') }}">Create new</a>
+{% endblock %}
