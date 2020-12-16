@@ -68,7 +68,6 @@ OK (3 tests, 3 assertions)
 
 -- phpMyAdmin SQL Dump
 -- version 5.0.2
--- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
 -- Generation Time: Dec 16, 2020 at 06:23 PM
