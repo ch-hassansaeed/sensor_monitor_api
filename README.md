@@ -1,6 +1,6 @@
 # Sensor Monitor Api Application
 
-**this project is made using symfony and mysql and phpunit test.**
+**this project is made using symfony5 ,Restful Api , mysql and phpunit test.**
 
 **Project Demo Video Link:-**
 
