@@ -3,8 +3,7 @@
 **this project is made using symfony5 ,Restful Api , mysql and phpunit test.**
 
 **Project Demo Video Link:-**
-
-https://github.com/ch-hassansaeed/sensor_monitor_api/blob/main/Project_Demo_video.mp4
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/7L-1AYqPvJ4/0.jpg)](https://www.youtube.com/watch?v=7L-1AYqPvJ4)
 
 ## API Testing
 http://127.0.0.1:8000/admin/sensors
