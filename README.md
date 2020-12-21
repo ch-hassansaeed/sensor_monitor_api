@@ -68,10 +68,15 @@ create or make migration using
 run the migration using 
 ```php bin/console doctrine:migrations:migrate```
 
-for run all test cases in util folder
- ```php bin/phpunit tests/Util```
+
 
 ## PHP Unit Testing
+
+install pre-req package for php unit testing 
+``` composer require --dev symfony/phpunit-bridge ```
+
+for run all test cases in util folder
+ ```php bin/phpunit tests/Util```
 
 php bin/phpunit tests/Util
 PHPUnit 7.5.20 by Sebastian Bergmann and contributors.
