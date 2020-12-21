@@ -77,6 +77,9 @@ install pre-req package for php unit testing
 
 for run all test cases in util folder
  ```php bin/phpunit tests/Util```
+ 
+ for run only specific test case from util folder like CalculatorTest.php
+ ```php bin/phpunit tests/Util/CalculatorTest.php```
 
 php bin/phpunit tests/Util
 PHPUnit 7.5.20 by Sebastian Bergmann and contributors.
