@@ -3,7 +3,9 @@
 **this project is made using symfony5 ,Restful Api , mysql and phpunit test.**
 
 **Project Demo Video Link:-**
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/7L-1AYqPvJ4/0.jpg)](https://www.youtube.com/watch?v=7L-1AYqPvJ4)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7L-1AYqPvJ4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 
 ## API Testing
 http://127.0.0.1:8000/admin/sensors
