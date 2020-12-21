@@ -54,7 +54,7 @@ http://127.0.0.1:8000/api/v1/sensor/222-dfs-34-df2-234-fdsf-234/alerts
 
 ]
 
-## symfony Supprtive commands
+## symfony Supportive commands
 
 start the symfony server
 ```symfony server:start```
