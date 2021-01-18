@@ -6,6 +6,10 @@
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/7L-1AYqPvJ4/0.jpg)](https://www.youtube.com/watch?v=7L-1AYqPvJ4)
 
+**How to Create basic PHP symfony5 Restful Microservice CURD Api and Mysql Video :-**
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/4V2fC4gBNgE/0.jpg)](https://www.youtube.com/watch?v=4V2fC4gBNgE)
+
 
 ## API Testing
 http://127.0.0.1:8000/admin/sensors
